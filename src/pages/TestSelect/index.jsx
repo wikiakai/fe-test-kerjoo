@@ -10,31 +10,18 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import {
     setProvinces,
-    clearProvince,
     setSelectedProvinces,
-    clearSelectedProvince,
 } from "../../redux/reducer/Province";
 
-import {
-    setKabp,
-    clearKabp,
-    setSelectedKabp,
-    clearSelectedKabp,
-} from "../../redux/reducer/Kabupaten";
+import { setKabp, setSelectedKabp } from "../../redux/reducer/Kabupaten";
 
 import {
     setKecamatan,
-    clearKecamatan,
     setSelectedKecamatan,
-    clearSelectedKecamatan,
 } from "../../redux/reducer/Kecamatan";
 
-import {
-    setDesa,
-    clearDesa,
-    setSelectedDesa,
-    clearSelectedDesa,
-} from "../../redux/reducer/Desa";
+import { setDesa, setSelectedDesa } from "../../redux/reducer/Desa";
+import { Button } from "bootstrap-4-react/lib/components";
 
 const TestSelect = () => {
     const dispatch = useDispatch();
@@ -49,27 +36,40 @@ const TestSelect = () => {
     const dataKecamatan = useSelector((state) => state.KECAMATAN.data);
     const selectedKecamatan = useSelector((state) => state.KECAMATAN.selected);
 
-    const [loadingProv, setLoadingProv] = useState(false);
+    const dataDesa = useSelector((state) => state.DESA.data);
+    const selectedDesa = useSelector((state) => state.DESA.selected);
 
     const getDataProvinces = async () => {
-        setLoadingProv(true);
+        dispatch(setProvinces([]));
+        dispatch(setKabp([]));
+        dispatch(setKecamatan([]));
+        dispatch(setDesa([]));
+
         const { data } = await getProvinces();
 
         dispatch(setProvinces(data));
-        setLoadingProv(false);
     };
 
     const getDataKabupaten = async () => {
+        dispatch(setKabp([]));
+        dispatch(setKecamatan([]));
+        dispatch(setDesa([]));
+
         const { data } = await getKabupatens(selectedProvince);
         dispatch(setKabp(data));
     };
 
     const getDataKecamatan = async () => {
+        dispatch(setKecamatan([]));
+        dispatch(setDesa([]));
+
         const { data } = await getKecamatan(selectedKabupaten);
         dispatch(setKecamatan(data));
     };
 
     const getDataDesa = async () => {
+        dispatch(setDesa([]));
+
         const { data } = await getDesa(selectedKecamatan);
         dispatch(setDesa(data));
     };
@@ -98,12 +98,18 @@ const TestSelect = () => {
             case "prov":
                 dispatch(setSelectedProvinces(id));
 
+                dispatch(setKabp([]));
+                dispatch(setKecamatan([]));
+                dispatch(setDesa([]));
                 break;
             case "kabp":
                 dispatch(setSelectedKabp(id));
+                dispatch(setKecamatan([]));
+                dispatch(setDesa([]));
                 break;
             case "kect":
                 dispatch(setSelectedKecamatan(id));
+                dispatch(setDesa([]));
                 break;
 
             default:
@@ -112,17 +118,20 @@ const TestSelect = () => {
         }
     };
 
+    console.log(dataKecamatan);
     return (
         <div>
             <NavbarApp />
+
             <Container>
                 <label>Provinsi</label>
                 <select
                     className="form-select mb-3"
                     onChange={(event) => handleChangeSelect(event)}
                     name="prov"
+                    value={selectedProvince}
                 >
-                    {dataProvinces &&
+                    {dataProvinces.length !== 0 &&
                         dataProvinces.map((prov) => (
                             <option value={prov.id}>{prov.name}</option>
                         ))}
@@ -132,8 +141,9 @@ const TestSelect = () => {
                     className="form-select mb-3"
                     name="kabp"
                     onChange={(event) => handleChangeSelect(event)}
+                    value={selectedKabupaten}
                 >
-                    {dataKabupaten &&
+                    {dataKabupaten.length !== 0 &&
                         dataKabupaten.map((kab) => (
                             <option value={kab.id}>{kab.name}</option>
                         ))}
@@ -144,7 +154,7 @@ const TestSelect = () => {
                     name="kect"
                     onChange={(event) => handleChangeSelect(event)}
                 >
-                    {dataKecamatan &&
+                    {dataKecamatan.length !== 0 &&
                         dataKecamatan.map((kec) => (
                             <option value={kec.id}>{kec.name}</option>
                         ))}
@@ -152,12 +162,12 @@ const TestSelect = () => {
                 <label>Desa</label>
                 <select
                     className="form-select mb-3"
-                    name="kect"
+                    name="desa"
                     onChange={(event) => handleChangeSelect(event)}
                 >
-                    {dataKecamatan &&
-                        dataKecamatan.map((kec) => (
-                            <option value={kec.id}>{kec.name}</option>
+                    {dataDesa.length !== 0 &&
+                        dataDesa.map((desa) => (
+                            <option value={desa.id}>{desa.name}</option>
                         ))}
                 </select>
             </Container>
