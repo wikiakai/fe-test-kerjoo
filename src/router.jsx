@@ -3,6 +3,7 @@ import "./index.css";
 import TestGrid from "./pages/TestGrid";
 import TestFlex from "./pages/TestFlex";
 import Welcome from "./pages/Welcome";
+import TestSelect from "./pages/TestSelect";
 
 export const router = createBrowserRouter([
     {
@@ -16,5 +17,9 @@ export const router = createBrowserRouter([
     {
         path: "/test-flex",
         element: <TestFlex />,
+    },
+    {
+        path: "/test-select",
+        element: <TestSelect />,
     },
 ]);

@@ -15,10 +15,7 @@ function NavbarApp() {
                         <Nav.Link href="/test-flex">Test Flex</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                        <Nav.Link href="#">Test Flex</Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                        <Nav.Link href="#">Test Flex</Nav.Link>
+                        <Nav.Link href="/test-select">Test Select</Nav.Link>
                     </Nav.Item>
                 </Navbar.Nav>
             </Collapse>
