@@ -118,7 +118,6 @@ const TestSelect = () => {
         }
     };
 
-    console.log(dataKecamatan);
     return (
         <div>
             <NavbarApp />
